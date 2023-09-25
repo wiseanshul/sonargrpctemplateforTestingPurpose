@@ -1,0 +1,277 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+# https://backstage.io/docs/features/software-catalog/descriptor-format#kind-template
+kind: Template
+metadata:
+  name: SpringbootGrpcAndGrphql
+  title: grpc and graphql Project Custom Action Template
+  description: An example template for the scaffolder that creates a simple demo service
+  tags:
+    - java
+    - grpc
+    - graphql
+    - sonar
+
+spec:
+  owner: user:guest
+  type: service
+
+  parameters:
+
+#graphql project info
+    - title: Provide some simple information for graphql project
+      required:
+        - component_id_graphql
+        - java_package_name_graphql
+        - owner_graphql
+      properties:
+        component_id_graphql:
+          title: Name
+          type: string
+          description: Unique name of the component of graphql
+          ui:field: EntityNamePicker
+        java_package_name_graphql:
+          title: graphQL Java Package Name
+          type: string
+          description: Name for the java package. eg (io.backstage.blah)
+        artifactId_graphql:
+          title: artifactId graphql project
+          type: string
+          description: enter artifactId for graphql project
+        description_graphql:
+          title: Description
+          type: string
+          description: Help others understand what this website is for.
+        owner_graphql:
+          title: Owner
+          type: string
+          description: Owner of the component
+          ui:field: OwnerPicker
+          ui:options:
+            allowedKinds:
+              - Group
+
+#graphql project github info
+    - title: Choose a location for graphql
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: Repository Location
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+#graphql project sonarcloud info
+    - title: create graphql project on sonarqube
+      properties:
+        graphqlProjectName:
+          title: projectName
+          type: string
+          description: Unique name of the project
+        grapgqlProjectKey:
+          title: projectKey
+          type: string
+          description: Unique name of the project
+        graphqlOrganizationName:
+          title: organization name
+          type: string
+          description: enter your sonarcloud organization name
+        graphqlHeaders:
+          title: berrier token
+          type: string
+          description: enter your sonarqube user token
+
+#grpc project info
+    - title: Provide some simple information for grpc project
+      required:
+        - component_id_grpc
+        - java_package_name_grpc
+        - owner_grpc
+      properties:
+        component_id_grpc:
+          title: Name
+          type: string
+          description: Unique name of the component of grpc project
+          ui:field: EntityNamePicker
+        java_package_name_grpc:
+          title: grpc Java Package Name
+          type: string
+          description: Name for the java package. eg (io.backstage.blah)
+        artifactId_grpc:
+          title: artifactId grpc project
+          type: string
+          description: enter artifactId for grpc project
+        description_grpc:
+          title: Description
+          type: string
+          description: Help others understand what this website is for.
+        owner_grpc:
+          title: Owner
+          type: string
+          description: Owner of the component
+          ui:field: OwnerPicker
+          ui:options:
+            allowedKinds:
+              - Group
+
+# Grpc  github info
+    - title: Choose a location for grpc
+      required:
+        - repoUrl2
+      properties:
+        repoUrl2:
+          title: Repository Location
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+
+# Grpc sonarcloud info
+    - title: create grpc project on sonarqube
+      properties:
+        grpcProjectName:
+          title: projectName
+          type: string
+          description: Unique name of the project
+        grpcProjectKey:
+          title: projectKey
+          type: string
+          description: Unique name of the project
+        grpcOrganizationName:
+          title: organization name
+          type: string
+          description: enter your sonarcloud organization name
+        grpcHeaders:
+          title: berrier token
+          type: string
+          description: enter your sonarqube user token
+
+
+  steps:
+
+#create sonarqube project for graphql
+    - id: create-sonarqube-project-graphql
+      name: Create SonarQube Project for graphql
+      action: api-call
+      input:
+        url: 'https://sonarcloud.io/api/projects/create'
+        method: 'POST'
+        params:
+          organization: ${{ parameters.graphqlOrganizationName }}
+          project: ${{ parameters.grapgqlProjectKey }}
+          name: ${{ parameters.graphqlProjectName }}
+        headers:
+          Authorization: 'Bearer ${{ parameters.graphqlHeaders }}'
+
+#create sonarqube project for grpc
+    - id: create-sonarqube-project-grpc
+      name: Create SonarQube Project for grpc
+      action: api-call
+      input:
+        url: 'https://sonarcloud.io/api/projects/create'
+        method: 'POST'
+        params:
+          organization: ${{ parameters.grpcOrganizationName }}
+          project: ${{ parameters.grpcProjectKey }}
+          name: ${{ parameters.grpcProjectName }}
+        headers:
+          Authorization: 'Bearer ${{ parameters.grpcHeaders }}'
+
+#genrate sonarqube token
+    - id: create-sonarqube-token
+      name: Create SonarQube token
+      action: api-call
+      input:
+        url: 'https://sonarcloud.io/api/user_tokens/generate'
+        method: 'POST'
+        params:
+          name: ${{ parameters.grpcProjectKey }}
+        headers:
+          Authorization: 'Bearer ${{ parameters.grpcHeaders }}'
+
+    - id: loggg
+      name: getlog
+      action: debug:log
+      input:
+        message: ${{ steps['create-sonarqube-token'].output.response }}
+
+    - id: template
+      name: Fetch Skeleton + Template of graphql
+      action: fetch:template
+      input:
+          url: ./GraphqlTest-skeleton
+          targetPath: ./app1
+          copyWithoutRender:
+            - .github/workflows/*
+          values:
+            component_id_graphql: ${{ parameters.component_id_graphql }}
+            description_graphql: ${{ parameters.description_graphql }}
+            java_package_name_graphql: ${{ parameters.java_package_name_graphql }}
+            owner_grpc: ${{ parameters.owner_grpc }}
+            artifactId_graphql: ${{ parameters.artifactId_graphql }}
+            artifactId_grpc: ${{ parameters.artifactId_grpc }}
+            java_package_name_grpc: ${{ parameters.java_package_name_grpc }}
+            graphqlOrganizationName: ${{ parameters.graphqlOrganizationName }}
+            graphqlProjectName: ${{ parameters.graphqlProjectName }}
+            grapgqlProjectKey: ${{ parameters.grapgqlProjectKey }}
+            sonarqubetoken: ${{ steps['create-sonarqube-token'].output.response }}
+    - id: publish
+      name: Publish
+      action: publish:github
+      input:
+        sourcePath: ./app1
+        allowedHosts: [ 'github.com' ]
+        description: This is graphql
+        repoUrl: ${{ parameters.repoUrl }}
+
+    - id: template2
+      name: Fetch Skeleton + Template of grpc
+      action: fetch:template
+      input:
+        url: ./GrpcTest-skeleton
+        targetPath: ./app2
+        copyWithoutRender:
+          - .github/workflows/*
+        values:
+          component_id_grpc: ${{ parameters.component_id_grpc }}
+          description_grpc: ${{ parameters.description_grpc }}
+          java_package_name_grpc: ${{ parameters.java_package_name_grpc }}
+          owner_graphql: ${{ parameters.owner_graphql }}
+          artifactId_grpc: ${{ parameters.artifactId_grpc }}
+          sonarqubetoken: ${{ steps['create-sonarqube-token'].output.response }}
+          grpcProjectName: ${{ parameters.grpcProjectName }}
+          grpcProjectKey:  ${{ parameters.grpcProjectKey }}
+          grpcOrganizationName: ${{ parameters.grpcOrganizationName }}
+
+    - id: publish2
+      name: Publish2
+      action: publish:github
+      input:
+        sourcePath: ./app2
+        allowedHosts: [ 'github.com' ]
+        description: This is grpc
+        repoUrl: ${{ parameters.repoUrl2 }}
+
+
+    - id: register
+      name: Register
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps['publish'].output.repoContentsUrl }}
+        catalogInfoPath: '/catalog-info.yaml'
+
+    - id: register
+      name: Register
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps['publish2'].output.repoContentsUrl }}
+        catalogInfoPath: '/catalog-info.yaml'
+
+
+
+
+
+
+

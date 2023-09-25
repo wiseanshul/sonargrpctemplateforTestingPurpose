@@ -1,0 +1,5 @@
+{
+  "name": "${{ values.component_id_grpc }}",
+  "private": true,
+  "dependencies": {}
+}
