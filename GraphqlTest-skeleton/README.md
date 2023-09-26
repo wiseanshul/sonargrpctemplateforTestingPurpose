@@ -1,3 +1,3 @@
 ${{ values.component_id_graphql }}
     
-        ${{ values.description_grpc }}
+        ${{ values.description_graphql }}

@@ -63,5 +63,23 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
+
+
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/${{ values.grpcRepoUsername }}/${{ values.grpcRepoName }}</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+
 </project>

@@ -41,6 +41,19 @@ spec:
           title: Description
           type: string
           description: Help others understand what this website is for.
+        graphqlRepoName:
+          title: github repository name of graphql project
+          type: string
+          description: enter github repository name of graphql project
+        graphqlRepoUsername:
+          title: enter username of github repository
+          type: string
+          description: enter github repository name of graphql project
+        graphqlToken:
+          title: enter usertoken of github repository
+          type: string
+          description: enter github repository usertoken
+
         owner_graphql:
           title: Owner
           type: string
@@ -82,6 +95,7 @@ spec:
           type: string
           description: enter your sonarqube user token
 
+
 #grpc project info
     - title: Provide some simple information for grpc project
       required:
@@ -94,6 +108,7 @@ spec:
           type: string
           description: Unique name of the component of grpc project
           ui:field: EntityNamePicker
+
         java_package_name_grpc:
           title: grpc Java Package Name
           type: string
@@ -106,6 +121,19 @@ spec:
           title: Description
           type: string
           description: Help others understand what this website is for.
+        grpcRepoName:
+          title: github repository name of grpc project
+          type: string
+          description: enter github repository name of grpc project
+        grpcRepoUsername:
+          title: enter username of github repository
+          type: string
+          description: enter github repository name of grpc project
+        grpcToken:
+          title: enter usertoken of github repository
+          type: string
+          description: enter github repository usertoken
+
         owner_grpc:
           title: Owner
           type: string
@@ -217,6 +245,11 @@ spec:
             graphqlProjectName: ${{ parameters.graphqlProjectName }}
             grapgqlProjectKey: ${{ parameters.grapgqlProjectKey }}
             sonarqubetoken: ${{ steps['create-sonarqube-token'].output.response }}
+            graphqlRepoName: ${{ parameters.graphqlRepoName }}
+            graphqlRepoUsername: ${{ parameters.graphqlRepoUsername }}
+            graphqlToken: ${{ parameters.graphqlToken }}
+            grpcRepoName: ${{ parameters.grpcRepoName }}
+            grpcRepoUsername: ${{ parameters.grpcRepoUsername }}
     - id: publish
       name: Publish
       action: publish:github
@@ -244,6 +277,9 @@ spec:
           grpcProjectName: ${{ parameters.grpcProjectName }}
           grpcProjectKey:  ${{ parameters.grpcProjectKey }}
           grpcOrganizationName: ${{ parameters.grpcOrganizationName }}
+          grpcRepoName: ${{ parameters.grpcRepoName }}
+          grpcRepoUsername: ${{ parameters.grpcRepoUsername }}
+          grpcToken: ${{ parameters.grpcToken }}
 
     - id: publish2
       name: Publish2
