@@ -25,7 +25,7 @@ spec:
         - owner_graphql
       properties:
         component_id_graphql:
-          title: Name
+          value : jojojojo
           type: string
           description: Unique name of the component of graphql
           ui:field: EntityNamePicker
@@ -75,7 +75,7 @@ spec:
           ui:options:
             allowedHosts:
               - github.com
-        value: aaaaa
+
 #graphql project sonarcloud info
     - title: create graphql project on sonarqube
       properties:
