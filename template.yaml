@@ -164,8 +164,8 @@ spec:
         method: 'POST'
         params:
           organization: ${{ parameters.graphqlOrganizationName }}
-          project: ${{ parameters.grapgqlProjectKey }}
-          name: ${{ parameters.graphqlProjectName }}
+          project: ${{ parameters.component_id_graphql }}
+          name: ${{ parameters.component_id_graphql }}
         headers:
           Authorization: 'Bearer ${{ parameters.graphqlHeaders }}'
 
@@ -178,8 +178,8 @@ spec:
         method: 'POST'
         params:
           organization: ${{ parameters.grpcOrganizationName }}
-          project: ${{ parameters.grpcProjectKey }}
-          name: ${{ parameters.grpcProjectName }}
+          project: ${{ parameters.component_id_grpc }}
+          name: ${{ parameters.component_id_grpc }}
         headers:
           Authorization: 'Bearer ${{ parameters.grpcHeaders }}'
 
