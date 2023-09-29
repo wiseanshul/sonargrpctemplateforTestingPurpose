@@ -3,7 +3,7 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: SpringbootGrpcAndGrphqlAndSonar
-  title: create graphql and grpc project with sonarcloud
+  title: create graphql and grpc project with sonarcloud for test
   description: An example template for the scaffolder that creates a simple graphql and grpc project with sonarcloud integration
   tags:
     - java
@@ -75,6 +75,7 @@ spec:
           ui:options:
             allowedHosts:
               - github.com
+        value: aaaaa
 #graphql project sonarcloud info
     - title: create graphql project on sonarqube
       properties:
