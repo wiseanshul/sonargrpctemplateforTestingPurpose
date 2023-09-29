@@ -25,7 +25,6 @@ spec:
         - owner_graphql
       properties:
         component_id_graphql:
-          value : jojojojo
           type: string
           description: Unique name of the component of graphql
           ui:field: EntityNamePicker
@@ -53,7 +52,14 @@ spec:
           title: enter usertoken of github repository
           type: string
           description: enter github repository usertoken
-
+        graphqlOrganizationName:
+          title: organization name
+          type: string
+          description: enter your sonarcloud organization name
+        graphqlHeaders:
+          title: berrier token
+          type: string
+          description: enter your sonarqube user token
         owner_graphql:
           title: Owner
           type: string
@@ -75,27 +81,6 @@ spec:
           ui:options:
             allowedHosts:
               - github.com
-
-#graphql project sonarcloud info
-    - title: create graphql project on sonarqube
-      properties:
-        graphqlProjectName:
-          title: projectName
-          type: string
-          description: Unique name of the project
-        grapgqlProjectKey:
-          title: projectKey
-          type: string
-          description: Unique name of the project
-        graphqlOrganizationName:
-          title: organization name
-          type: string
-          description: enter your sonarcloud organization name
-        graphqlHeaders:
-          title: berrier token
-          type: string
-          description: enter your sonarqube user token
-
 
 #grpc project info
     - title: Provide some simple information for grpc project
@@ -134,7 +119,14 @@ spec:
           title: enter usertoken of github repository
           type: string
           description: enter github repository usertoken
-
+        grpcOrganizationName:
+          title: organization name
+          type: string
+          description: enter your sonarcloud organization name
+        grpcHeaders:
+          title: berrier token
+          type: string
+          description: enter your sonarqube user token
         owner_grpc:
           title: Owner
           type: string
@@ -157,25 +149,8 @@ spec:
             allowedHosts:
               - github.com
 
-# Grpc sonarcloud info
-    - title: create grpc project on sonarqube
-      properties:
-        grpcProjectName:
-          title: projectName
-          type: string
-          description: Unique name of the project
-        grpcProjectKey:
-          title: projectKey
-          type: string
-          description: Unique name of the project
-        grpcOrganizationName:
-          title: organization name
-          type: string
-          description: enter your sonarcloud organization name
-        grpcHeaders:
-          title: berrier token
-          type: string
-          description: enter your sonarqube user token
+
+
 
 
   steps:
@@ -208,17 +183,6 @@ spec:
         headers:
           Authorization: 'Bearer ${{ parameters.grpcHeaders }}'
 
-#genrate sonarqube token
-    - id: create-sonarqube-token
-      name: Create SonarQube token
-      action: api-call
-      input:
-        url: 'https://sonarcloud.io/api/user_tokens/generate'
-        method: 'POST'
-        params:
-          name: ${{ parameters.grpcProjectKey }}
-        headers:
-          Authorization: 'Bearer ${{ parameters.grpcHeaders }}'
 
     - id: loggg
       name: getlog
@@ -243,9 +207,9 @@ spec:
             artifactId_grpc: ${{ parameters.artifactId_grpc }}
             java_package_name_grpc: ${{ parameters.java_package_name_grpc }}
             graphqlOrganizationName: ${{ parameters.graphqlOrganizationName }}
-            graphqlProjectName: ${{ parameters.graphqlProjectName }}
-            grapgqlProjectKey: ${{ parameters.grapgqlProjectKey }}
-            sonarqubetoken: ${{ steps['create-sonarqube-token'].output.response }}
+            graphqlProjectName: ${{ parameters.component_id_graphql }}
+            grapgqlProjectKey: ${{ parameters.component_id_graphql }}
+            sonarqubetoken: ${{ parameters.grpcHeaders }}
             graphqlRepoName: ${{ parameters.graphqlRepoName }}
             graphqlRepoUsername: ${{ parameters.graphqlRepoUsername }}
             graphqlToken: ${{ parameters.graphqlToken }}
@@ -276,9 +240,11 @@ spec:
           java_package_name_grpc: ${{ parameters.java_package_name_grpc }}
           owner_graphql: ${{ parameters.owner_graphql }}
           artifactId_grpc: ${{ parameters.artifactId_grpc }}
-          sonarqubetoken: ${{ steps['create-sonarqube-token'].output.response }}
-          grpcProjectName: ${{ parameters.grpcProjectName }}
-          grpcProjectKey:  ${{ parameters.grpcProjectKey }}
+          sonarqubetoken: ${{ parameters.grpcHeaders }}
+
+          grpcProjectName: ${{ parameters.component_id_grpc }}
+          grpcProjectKey:  ${{ parameters.component_id_grpc }}
+
           grpcOrganizationName: ${{ parameters.grpcOrganizationName }}
           grpcRepoName: ${{ parameters.grpcRepoName }}
           grpcRepoUsername: ${{ parameters.grpcRepoUsername }}
