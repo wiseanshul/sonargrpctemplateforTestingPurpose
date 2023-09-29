@@ -2,7 +2,7 @@ apiVersion: scaffolder.backstage.io/v1beta3
 # https://backstage.io/docs/features/software-catalog/descriptor-format#kind-template
 kind: Template
 metadata:
-  name: SpringbootGrpcAndGrphqlAndSonar
+  name: SpringbootGrpcAndGrphqlAndSonarfortesting
   title: create graphql and grpc project with sonarcloud for test
   description: An example template for the scaffolder that creates a simple graphql and grpc project with sonarcloud integration
   tags:
