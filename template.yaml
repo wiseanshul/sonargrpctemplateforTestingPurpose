@@ -263,6 +263,8 @@ spec:
       name: Fetch Skeleton + Template of grpc
       action: fetch:template
       input:
+
+
         url: ./GrpcTest-skeleton
         targetPath: ./app2
         copyWithoutRender:
